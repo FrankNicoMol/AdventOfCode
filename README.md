@@ -1,5 +1,5 @@
-# AdventOfCode
-Solutions of Advent Of Code (AOC) puzzels: https://adventofcode.com/
+# Advent of Code
+Solutions to the puzzles of [Advent Of Code (AOC)](https://adventofcode.com/)
 
 Puzzles solved:
 
