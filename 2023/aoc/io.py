@@ -1,3 +1,6 @@
+from glob import glob
+
+
 def read_txt(path):
     """read .txt file and strip"""
 
@@ -37,12 +40,8 @@ def results(fun, day):
     print_header(day)
     path = f'input/{day}_'
 
+    files = glob(f'{path}*')
     for second_part in range(2):
-        for j in range(2):
-            if j:
-                input = 'input'
-            else:
-                input = 'example'
-
-            value = fun(f'{path}{input}.txt', second_part)
-            print_result(day, input, second_part, value)
+        for file in files:
+            value = fun(file, second_part)
+            print_result(day, file.split('_')[1].split('.')[0], second_part, value)
