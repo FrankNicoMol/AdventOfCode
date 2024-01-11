@@ -47,3 +47,4 @@ def results(fun, day):
                     file.split('_')[0][-2:] == 'p2' and second_part) or (file.split('_')[0][-2:] not in ['p1', 'p2']):
                 value = fun(file, second_part)
                 print_result(day, file.split('_')[1].split('.')[0], second_part, value)
+
