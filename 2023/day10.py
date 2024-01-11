@@ -2,10 +2,17 @@ from aoc import results, read_txt, remove_empty
 import os
 import numpy as np
 
-right = np.array([0,1]).reshape((2,1))
-left = np.array([0,-1]).reshape((2,1))
-up = np.array([-1,0]).reshape((2,1))
-down = np.array([1,0]).reshape((2,1))
+def get_step(direction):
+
+    if direction == 'right':
+        step = np.array([0,1]).reshape((2,1))
+    elif direction == 'left':
+        step= np.array([0,-1]).reshape((2,1))
+    elif direction == 'up':
+        step=np.array([-1,0]).reshape((2,1))
+    elif direction == 'down':
+        step= np.array([1,0]).reshape((2,1))
+    return step
 
 def next_pos(maze, pos, step):
     h, w = maze.shape
@@ -17,23 +24,23 @@ def next_pos(maze, pos, step):
 
 
 def start_dir(maze, start_pos):
-    p, pos = next_pos(maze, start_pos, right)
+    p, pos = next_pos(maze, start_pos, get_step('right'))
     if p == '-' or p == 'J' or p == '7':
         return 'right'
-    p, pos = next_pos(maze, start_pos, left)
+    p, pos = next_pos(maze, start_pos, get_step('left'))
     if p == '-' or p == 'L' or p == 'F':
         return 'left'
-    p, pos = next_pos(maze, start_pos, up)
+    p, pos = next_pos(maze, start_pos, get_step('up'))
     if p == '|' or p == 'L' or p == 'J':
         return 'up'
-    p, pos = next_pos(maze, start_pos, down)
+    p, pos = next_pos(maze, start_pos, get_step('down'))
     if p == '|' or p == 'F' or p == '7':
         return 'down'
 
 
 def next_dir(maze, pos, d):
+    p, pos_next = next_pos(maze, pos, get_step(d))
     if d == 'right':
-        p, pos_next = next_pos(maze, pos, right)
         if p == 'S':
             next_d = 'start'
         elif p == '-':
@@ -43,7 +50,6 @@ def next_dir(maze, pos, d):
         elif p == '7':
             next_d = 'down'
     if d == 'left':
-        p, pos_next = next_pos(maze, pos, left)
         if p == 'S':
             next_d = 'start'
         elif p == '-':
@@ -53,7 +59,6 @@ def next_dir(maze, pos, d):
         elif p == 'L':
             next_d = 'up'
     if d == 'up':
-        p, pos_next = next_pos(maze, pos, up)
         if p == 'S':
             next_d = 'start'
         elif p == '|':
@@ -63,7 +68,6 @@ def next_dir(maze, pos, d):
         elif p == 'F':
             next_d = 'right'
     if d == 'down':
-        p, pos_next = next_pos(maze, pos, down)
         if p == 'S':
             next_d = 'start'
         elif p == '|':
@@ -77,11 +81,11 @@ def get_value(file, second):
     text = read_txt(file)
     maze = np.array([[*l] for l in text])
 
+
     pos = np.array(np.where(maze == 'S'))
     d = start_dir(maze, pos)
     step = 0
     while d != 'start':
-        print(d)
         pos, d = next_dir(maze, pos, d)
 
         step +=1
