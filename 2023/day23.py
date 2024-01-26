@@ -1,10 +1,11 @@
-from aoc import results, read_txt, remove_empty
+from aoc import results
 import os
 
 
-def get_value(test, second):
+def get_value(file, second):
     1 + 1
-    return 1
+    return 5
+
 
 
 day = os.path.basename(__file__).split(".")[0]

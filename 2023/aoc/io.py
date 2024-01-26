@@ -35,7 +35,7 @@ def print_header(day):
 
 
 def results(fun, day):
-    """Calculate results for examples, inputs and both parts"""
+
 
     print_header(day)
     path = f'input/{day}'
@@ -45,6 +45,29 @@ def results(fun, day):
         for file in files:
             if (file.split('_')[0][-2:] == 'p1' and not second_part) or (
                     file.split('_')[0][-2:] == 'p2' and second_part) or (file.split('_')[0][-2:] not in ['p1', 'p2']):
-                value = fun(file, second_part)
+
+                text = read_txt(file)
+                value = fun(text, second_part)
                 print_result(day, file.split('_')[1].split('.')[0], second_part, value)
+
+def load_text(day, num = 0):
+    """load text"""
+
+    print_header(day)
+    path = f'input/{day}'
+
+    files = glob(f'{path}*')
+    file_count = 0
+    for second_part in range(2):
+        for file in files:
+
+            if (file.split('_')[0][-2:] == 'p1' and not second_part) or (
+                    file.split('_')[0][-2:] == 'p2' and second_part) or (file.split('_')[0][-2:] not in ['p1', 'p2']):
+
+                text = read_txt(file)
+                if file_count == num:
+                    print(file)
+                    return text
+                file_count += 1
+
 
