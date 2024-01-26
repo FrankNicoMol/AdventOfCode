@@ -1,1 +1,1 @@
-from aoc.io import read_txt, remove_empty, print_result, results
+from aoc.io import read_txt, remove_empty, print_result, results, load_text
