@@ -35,9 +35,9 @@ def check_for_mirror(ti_map):
     h, w = ti_map.shape
     for i in range(1, w - 1):
 
-        if i == 1 and np.array_equal(ti_map[:, 0], ti_map[:, 1]):
+        if i == 1 and np.sum(ti_map[:,0] != ti_map[:,1]) == 0: #np.array_equal(ti_map[:, 0], ti_map[:, 1]):
             idx = i
-        elif i == np.array_equal(ti_map[:, w - 2], ti_map[:, w - 1]):
+        elif np.sum(ti_map[:,w-2] != ti_map[:,w-1]) == 0:# np.array_equal(ti_map[:, w - 2], ti_map[:, w - 1]):
             idx = w - 1
         else:
             left = np.flip(ti_map[:, :i], axis=1)
@@ -51,30 +51,50 @@ def check_for_mirror(ti_map):
             else:
                 m = wl
 
-            if np.array_equal(left[:, :m], right[:, :m]):
+            if np.sum(left[:, :m] != right[:, :m]) == 0:
+                idx = i
+
+    return idx
+
+def check_for_smudge(ti_map):
+    """Check for mirror, return the index"""
+
+    idx = 0
+    h, w = ti_map.shape
+    for i in range(1, w - 1):
+
+        if i == 1 and np.sum(ti_map[:,0] != ti_map[:,1]) == 1:
+            idx = i
+        elif np.sum(ti_map[:,w-2] != ti_map[:,w-1]) == 1:
+            idx = w - 1
+        else:
+            left = np.flip(ti_map[:, :i], axis=1)
+            right = ti_map[:, i:]
+
+            hl, wl = left.shape
+            hr, wr = right.shape
+
+            if wl > wr:
+                m = wr
+            else:
+                m = wl
+
+            if np.sum(left[:, :m] != right[:, :m]) == 1:
                 idx = i
 
     return idx
 
 def check_smudge(ti_map):
-    h, w = ti_map.shape
 
     val = 0
-    for i in range(h):
-        for j in range(w):
-            q_map = ti_map.copy()
-            if q_map[i, j] == '.':
-                q_map[i, j] = '#'
-            else:
-                q_map[i, j] = '.'
 
-            p = check_for_mirror(q_map)
-            if p > val:
-                val = p
+    p = check_for_smudge(ti_map)
+    if p > val:
+        val = p
 
-            p = check_for_mirror(np.rot90(q_map)) * 100
-            if p > val:
-                val = p
+    p = check_for_smudge(np.rot90(ti_map)) * 100
+    if p > val:
+        val = p
 
 
     return val

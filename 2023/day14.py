@@ -23,6 +23,7 @@ def tilt_array(array):
     final_array = np.array([*final_string])
     return final_array
 
+
 def flip_north(board):
     board_tilted = []
     for array in board.T:
@@ -31,14 +32,14 @@ def flip_north(board):
 
     return board_final
 
+
 def flip_cycle(board):
-
-
     for i in range(4):
         board = flip_north(board)
-        board = np.rot90(board, k = 3)
+        board = np.rot90(board, k=3)
 
     return board
+
 
 def cal_load(board):
     h, w = board.shape
@@ -53,29 +54,29 @@ def get_value(text, second):
     board = to_array(text)
 
     if second:
-        reps = 100
-        t = np.zeros(reps)
-        old_sum = np.inf
+        reps = 1000000000
+
+        board_dict = {}
+
         for i in range(reps):
             board_final = flip_cycle(board)
-            new_sum = np.sum(board_final != board)
-            new_load = cal_load(board_final)
-            t[i] = new_load
-            if new_sum:# and old_sum != new_sum:
-                board = board_final
-                old_sum = new_sum
-            else:
+            board_flat = ''.join(board.flatten())
+            if board_flat in board_dict.keys():
+                last_idx = board_dict[board_flat]
                 break
+            else:
+                board_dict[board_flat] = i
+                board = board_final
+        cycle = i - last_idx
 
-        #if (1000000000 - i) % 2 == 0:
-            #board_final = flip_cycle(board)
+        remainder = (reps - i) % cycle
+        for i in range(remainder):
+            board_final = flip_cycle(board)
+            board = board_final
         total = cal_load(board_final)
-        print(t)
     else:
         board_final = flip_north(board)
         total = cal_load(board_final)
-
-
 
     return total
 
