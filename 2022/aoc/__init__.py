@@ -22,7 +22,7 @@ def get_example_lines(path):
 
 
 def print_header(day, year=2022):
-    print(f'Result of Advent of Code, year {year}, day {day}')
+    print(f'\nResult of Advent of Code, year {year}, day {day}')
     print(f'Find description at https://adventofcode.com/{year}/day/{day}\n')
 
 

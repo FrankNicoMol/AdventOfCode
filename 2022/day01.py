@@ -15,10 +15,33 @@ def get_day_number():
     return day_integer
 
 
+def print_solutions(lines, part=1):
+    """Generate results and print solutions."""
+    name = 'Part II' if part - 1 else 'Part I'
+    print_solution(part=name, solution=get_solution(lines, part=part))
+    if part -1:
+        print('')
+
+
+def solver(day):
+    run_examples(day, lambda x: get_solution(x, part=1))
+
+    # Load data
+    lines = get_lines(day=day)
+
+    # Part 1
+    print_solutions(lines, part=1)
+
+    # Part 2
+    print_solutions(lines, part=2)
+
+
 def get_solution(lines, part=1):
+    # General applicability
     elves = [sum([int(g) for g in group]) for item, group in groupby(lines, key=bool) if item]
     elves.sort(reverse=True)
 
+    # Part I & Part II
     max_calories = sum(elves[:3]) if part - 1 else elves[0]
 
     return max_calories
@@ -27,17 +50,4 @@ def get_solution(lines, part=1):
 if __name__ == "__main__":
     day = get_day_number()
     print_header(day=day)
-
-    # Examples
-    run_examples(day, lambda x: get_solution(x, part=1))
-
-    lines = get_lines(day=day)
-
-    # Part 1
-    solution_p1 = get_solution(lines, part=1)
-    print_solution(part='Part I', solution=solution_p1)
-
-    # Part 2
-    solution_p2 = get_solution(lines, part=2)
-    print_solution(part='Part II', solution=solution_p2)
-
+    solver(day)
