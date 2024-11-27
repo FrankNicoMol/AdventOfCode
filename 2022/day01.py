@@ -1,5 +1,7 @@
-from aoc import get_input, print_header
+from aoc import get_lines, print_header
 import os
+import sys
+from itertools import groupby
 
 
 def get_day_number():
@@ -16,4 +18,8 @@ def get_day_number():
 if __name__ == "__main__":
     day = get_day_number()
     print_header(day=day)
-    text = get_input(day=day)
+    lines = get_lines(day=day, args=sys.argv)
+    elves = [sum([int(g) for g in group]) for item, group in groupby(lines, key=bool) if item]
+    elves.sort(reverse=True)
+    max_calories = sum(elves[:3])
+    print(max_calories)
