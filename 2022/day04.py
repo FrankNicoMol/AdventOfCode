@@ -1,6 +1,6 @@
-from aoc import get_lines, print_header
+from aoc import get_lines, print_header, run_examples, print_solution
 import os
-import sys
+from itertools import groupby
 
 
 def get_day_number():
@@ -14,7 +14,47 @@ def get_day_number():
     return day_integer
 
 
+def print_solutions(lines, part=1):
+    """Generate results and print solutions."""
+
+    name = 'Part II' if part - 1 else 'Part I'
+    print_solution(part=name, solution=get_solution(lines, part=part))
+    if part - 1:
+        print('')
+
+
+def solver(day):
+    """Generate the solutions for all data for given day."""
+
+    run_examples(day, lambda x: get_solution(x, part=1))
+
+    # Load data
+    lines = get_lines(day=day)
+
+    # Part 1
+    print_solutions(lines, part=1)
+
+    # Part 2
+    print_solutions(lines, part=2)
+
+
+def get_solution(lines, part=1):
+    """Generate the solution with given input lines."""
+
+    # General applicability
+
+    # Part I
+    if not part - 1:
+        solution = ''
+
+    # Part II
+    else:
+        solution = ''
+
+    return solution
+
+
 if __name__ == "__main__":
     day = get_day_number()
     print_header(day=day)
-    lines = get_lines(day = day, args = sys.argv)
+    solver(day)

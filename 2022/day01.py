@@ -1,6 +1,5 @@
 from aoc import get_lines, print_header, run_examples, print_solution
 import os
-import sys
 from itertools import groupby
 
 
@@ -17,13 +16,16 @@ def get_day_number():
 
 def print_solutions(lines, part=1):
     """Generate results and print solutions."""
+
     name = 'Part II' if part - 1 else 'Part I'
     print_solution(part=name, solution=get_solution(lines, part=part))
-    if part -1:
+    if part - 1:
         print('')
 
 
 def solver(day):
+    """Generate the solutions for all data for given day."""
+
     run_examples(day, lambda x: get_solution(x, part=1))
 
     # Load data
@@ -37,14 +39,16 @@ def solver(day):
 
 
 def get_solution(lines, part=1):
+    """Generate the solution with given input lines."""
+
     # General applicability
     elves = [sum([int(g) for g in group]) for item, group in groupby(lines, key=bool) if item]
     elves.sort(reverse=True)
 
     # Part I & Part II
-    max_calories = sum(elves[:3]) if part - 1 else elves[0]
+    solution = sum(elves[:3]) if part - 1 else elves[0]
 
-    return max_calories
+    return solution
 
 
 if __name__ == "__main__":
