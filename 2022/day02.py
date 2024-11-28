@@ -34,8 +34,34 @@ def solver(day):
     # Part 1
     print_solutions(lines, part=1)
 
+    # Examples part 2
+    run_examples(day, lambda x: get_solution(x, part=2))
+
     # Part 2
     print_solutions(lines, part=2)
+
+
+scores1 = {'A': {'X': 3 + 1,
+                 'Y': 6 + 2,
+                 'Z': 0 + 3},
+           'B': {'X': 0 + 1,
+                 'Y': 3 + 2,
+                 'Z': 6 + 3},
+           'C': {'X': 6 + 1,
+                 'Y': 0 + 2,
+                 'Z': 3 + 3}
+           }
+
+scores2 = {'A': {'X': 0 + 3,
+                 'Y': 3 + 1,
+                 'Z': 6 + 2},
+           'B': {'X': 0 + 1,
+                 'Y': 3 + 2,
+                 'Z': 6 + 3},
+           'C': {'X': 0 + 2,
+                 'Y': 3 + 3,
+                 'Z': 6 + 1}
+           }
 
 
 def get_solution(lines, part=1):
@@ -45,11 +71,22 @@ def get_solution(lines, part=1):
 
     # Part I
     if not part - 1:
-        solution = ''
+        all = []
+        for line in lines:
+            opp, me = line.split(' ')
+            score = scores1[opp][me]
+            all.append(score)
+
+        solution = sum(all)
 
     # Part II
     else:
-        solution = ''
+        all = []
+        for line in lines:
+            opp, me = line.split(' ')
+            score = scores2[opp][me]
+            all.append(score)
+        solution = sum(all)
 
     return solution
 
