@@ -26,15 +26,15 @@ def print_solutions(lines, part=1):
 def solver(day):
     """Generate the solutions for all data for given day."""
 
-    run_examples(day, lambda x: get_solution(x, part=1))
-
     # Load data
     lines = get_lines(day=day)
 
     # Part 1
+    run_examples(day, lambda x: get_solution(x, part=1))
     print_solutions(lines, part=1)
 
     # Part 2
+    run_examples(day, lambda x: get_solution(x, part=2))
     print_solutions(lines, part=2)
 
 

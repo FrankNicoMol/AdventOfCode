@@ -26,15 +26,15 @@ def print_solutions(lines, part=1):
 def solver(day):
     """Generate the solutions for all data for given day."""
 
-    run_examples(day, lambda x: get_solution(x, part=1))
-
     # Load data
     lines = get_lines(day=day)
 
     # Part 1
+    run_examples(day, lambda x: get_solution(x, part=1))
     print_solutions(lines, part=1)
 
     # Part 2
+    run_examples(day, lambda x: get_solution(x, part=2))
     print_solutions(lines, part=2)
 
 
@@ -45,11 +45,19 @@ def get_solution(lines, part=1):
 
     # Part I
     if not part - 1:
-        solution = ''
+        left = [int(line.split('  ')[0]) for line in lines]
+        right = [int(line.split('  ')[1]) for line in lines]
+        left.sort()
+        right.sort()
+        solution = sum([abs(l - r) for l,r in zip(left, right)])
 
     # Part II
     else:
-        solution = ''
+        left = [int(line.split('  ')[0]) for line in lines]
+        right = [int(line.split('  ')[1]) for line in lines]
+
+        solution = sum([l * right.count(l) for l,r in zip(left, right)])
+
 
     return solution
 
