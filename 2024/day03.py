@@ -79,16 +79,17 @@ def get_solution(lines, part=1):
             for m in muls:
                 temp_dos = [d for d in dos if d < m]
                 temp_donts = [d for d in donts if d < m]
-                # print(temp_dos)
-                # print(temp_donts)
-                # print(m)
+
                 if not temp_dos and not temp_donts:
                     nmuls.append(line[m + 4: m + 12])
                 elif temp_dos and not temp_donts:
                     nmuls.append(line[m + 4: m + 12])
                 elif temp_dos and temp_donts:
+
                     mdo = max(temp_dos)
                     mdont = max(temp_donts)
+
+                    print(temp_dos, temp_donts, m, mdo, mdont, f'{mdo if mdo > mdont else mdont}')
                     if mdont < mdo:
                         nmuls.append(line[m + 4: m + 12])
 
