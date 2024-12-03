@@ -70,7 +70,6 @@ def get_solution(lines, part=1):
     else:
         nm = []
         for line in lines:
-
             dos = [m.start() for m in re.finditer('do\(\)', line)]
             donts = [m.start() for m in re.finditer('don\'t\(\)', line)]
             dos.sort()
@@ -80,14 +79,17 @@ def get_solution(lines, part=1):
             for m in muls:
                 temp_dos = [d for d in dos if d < m]
                 temp_donts = [d for d in donts if d < m]
+                # print(temp_dos)
+                # print(temp_donts)
+                # print(m)
                 if not temp_dos and not temp_donts:
                     nmuls.append(line[m + 4: m + 12])
                 elif temp_dos and not temp_donts:
                     nmuls.append(line[m + 4: m + 12])
                 elif temp_dos and temp_donts:
-                    mdo = min(np.array(temp_dos) - m)
-                    mdont = min(np.array(temp_donts) - m)
-                    if mdo > mdont:
+                    mdo = max(temp_dos)
+                    mdont = max(temp_donts)
+                    if mdont < mdo:
                         nmuls.append(line[m + 4: m + 12])
 
             for m in nmuls:
