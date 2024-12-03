@@ -1,6 +1,7 @@
 from aoc import get_lines, print_header, run_examples, print_solution
 import os
-from itertools import groupby
+import re
+import numpy as np
 
 
 def get_day_number():
@@ -45,11 +46,65 @@ def get_solution(lines, part=1):
 
     # Part I
     if not part - 1:
-        solution = ''
+        nm = []
+        for line in lines:
+            muls = [line[m.start() + 4: m.start() + 12] for m in re.finditer('mul\(', line)]
+
+            for m in muls:
+                if ',' in m:
+                    d1 = m.split(',')[0]
+                    r = ('').join(m.split(',')[1:])
+                    if r:
+                        if r[:3].isdigit() and len(r) > 3:
+                            if r[3] == ')':
+                                nm.append([int(d1), int(r[:3])])
+                        elif r[:2].isdigit() and len(r) > 2:
+                            if r[2] == ')':
+                                nm.append([int(d1), int(r[:2])])
+                        elif r[0].isdigit() and len(r) > 1:
+                            if r[1] == ')':
+                                nm.append([int(d1), int(r[0])])
+        solution = sum([a * b for a, b in nm])
 
     # Part II
     else:
-        solution = ''
+        nm = []
+        for line in lines:
+
+            dos = [m.start() for m in re.finditer('do\(\)', line)]
+            donts = [m.start() for m in re.finditer('don\'t\(\)', line)]
+            dos.sort()
+            donts.sort()
+            muls = [m.start() for m in re.finditer('mul\(', line)]
+            nmuls = []
+            for m in muls:
+                temp_dos = [d for d in dos if d < m]
+                temp_donts = [d for d in donts if d < m]
+                if not temp_dos and not temp_donts:
+                    nmuls.append(line[m + 4: m + 12])
+                elif temp_dos and not temp_donts:
+                    nmuls.append(line[m + 4: m + 12])
+                elif temp_dos and temp_donts:
+                    mdo = min(np.array(temp_dos) - m)
+                    mdont = min(np.array(temp_donts) - m)
+                    if mdo > mdont:
+                        nmuls.append(line[m + 4: m + 12])
+
+            for m in nmuls:
+                if ',' in m:
+                    d1 = m.split(',')[0]
+                    r = ('').join(m.split(',')[1:])
+                    if r:
+                        if r[:3].isdigit() and len(r) > 3:
+                            if r[3] == ')':
+                                nm.append([int(d1), int(r[:3])])
+                        elif r[:2].isdigit() and len(r) > 2:
+                            if r[2] == ')':
+                                nm.append([int(d1), int(r[:2])])
+                        elif r[0].isdigit() and len(r) > 1:
+                            if r[1] == ')':
+                                nm.append([int(d1), int(r[0])])
+            solution = sum([a * b for a, b in nm])
 
     return solution
 
