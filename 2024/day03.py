@@ -68,7 +68,9 @@ def get_solution(lines, part=1):
 
     # Part II
     else:
-        nm = []
+
+        solution = 0
+        last_dont = False
         for line in lines:
             dos = [m.start() for m in re.finditer('do\(\)', line)]
             donts = [m.start() for m in re.finditer('don\'t\(\)', line)]
@@ -80,7 +82,7 @@ def get_solution(lines, part=1):
                 temp_dos = [d for d in dos if d < m]
                 temp_donts = [d for d in donts if d < m]
 
-                if not temp_dos and not temp_donts:
+                if not temp_dos and not temp_donts and not last_dont:
                     nmuls.append(line[m + 4: m + 12])
                 elif temp_dos and not temp_donts:
                     nmuls.append(line[m + 4: m + 12])
@@ -89,10 +91,17 @@ def get_solution(lines, part=1):
                     mdo = max(temp_dos)
                     mdont = max(temp_donts)
 
-                    print(temp_dos, temp_donts, m, mdo, mdont, f'{mdo if mdo > mdont else mdont}')
+                    #print(temp_dos, temp_donts, m, mdo, mdont, f'{mdo if mdo > mdont else mdont}')
                     if mdont < mdo:
                         nmuls.append(line[m + 4: m + 12])
 
+            if donts:
+                last_dont = True
+                if dos:
+                    if max(donts) < max(dos):
+                        last_dont = False
+
+            nm = []
             for m in nmuls:
                 if ',' in m:
                     d1 = m.split(',')[0]
@@ -101,13 +110,14 @@ def get_solution(lines, part=1):
                         if r[:3].isdigit() and len(r) > 3:
                             if r[3] == ')':
                                 nm.append([int(d1), int(r[:3])])
+
                         elif r[:2].isdigit() and len(r) > 2:
                             if r[2] == ')':
                                 nm.append([int(d1), int(r[:2])])
                         elif r[0].isdigit() and len(r) > 1:
                             if r[1] == ')':
                                 nm.append([int(d1), int(r[0])])
-            solution = sum([a * b for a, b in nm])
+            solution += sum([a * b for a, b in nm])
 
     return solution
 
