@@ -1,6 +1,7 @@
 from aoc import get_lines, print_header, run_examples, print_solution
 import os
-from itertools import groupby
+import numpy as np
+import re
 
 
 def get_day_number():
@@ -38,6 +39,11 @@ def solver(day):
     print_solutions(lines, part=2)
 
 
+def get_occurences(lines):
+    occ = sum([len(list(re.finditer('XMAS', line))) + len(list(re.finditer('XMAS', line[::-1]))) for line in lines])
+    return occ
+
+
 def get_solution(lines, part=1):
     """Generate the solution with given input lines."""
 
@@ -45,11 +51,34 @@ def get_solution(lines, part=1):
 
     # Part I
     if not part - 1:
-        solution = ''
+        m = np.array([list(line) for line in lines])
+
+        h = [''.join(line) for line in m]
+        v = [''.join(line) for line in m.T]
+
+        diagonals = [m[::-1, :].diagonal(i) for i in range(-m.shape[0] + 1, m.shape[1])]
+        d1 = [''.join(line) for line in diagonals]
+
+        diagonals = [m.diagonal(i) for i in range(-m.shape[0] + 1, m.shape[1])]
+        d2 = [''.join(line) for line in diagonals]
+
+        solution = get_occurences(h)
+        solution += get_occurences(v)
+        solution += get_occurences(d1)
+        solution += get_occurences(d2)
 
     # Part II
     else:
-        solution = ''
+        m = np.array([list(line) for line in lines])
+        h, w = m.shape
+        alist = np.argwhere(m == 'A')
+
+        solution = 0
+        for x, y in alist:
+            if 0 < x < w - 1 and 0 < y < h - 1:
+                q = m[x - 1, y - 1] + m[x + 1, y - 1] + m[x - 1, y + 1] + m[x + 1, y + 1]
+                if q.count('M') == 2 and q.count('S') == 2 and m[x - 1, y - 1] != m[x+1, y+1]:
+                    solution += 1
 
     return solution
 
