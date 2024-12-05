@@ -1,6 +1,10 @@
 from aoc import get_lines, print_header, run_examples, print_solution
 import os
-from itertools import groupby
+import numpy as np
+import itertools
+from collections import defaultdict, deque
+
+
 
 
 def get_day_number():
@@ -45,11 +49,67 @@ def get_solution(lines, part=1):
 
     # Part I
     if not part - 1:
-        solution = ''
+        solution = 0
+        index = lines.index('')
+        rules = [line.split('|') for line in lines[:index]]
+        rules = np.array([[int(line[0]), int(line[1])]for line in rules])
+        updates = lines[index+1:]
+        updates = [[int(val) for val in line.split(',')] for line in updates]
+
+        for update in updates:
+            urules = [[a,b] for a,b in rules if a in update and b in update]
+            correct = True
+            for a,b in urules:
+                if update.index(a) > update.index(b):
+                    correct = False
+                    break
+            if correct:
+                solution += update[len(update)//2]
+
 
     # Part II
     else:
-        solution = ''
+
+        solution = 0
+        index = lines.index('')
+        rules = [line.split('|') for line in lines[:index]]
+        rules = np.array([[int(line[0]), int(line[1])]for line in rules])
+        updates = lines[index+1:]
+        updates = [[int(val) for val in line.split(',')] for line in updates]
+
+        for update in updates:
+            urules = [[a,b] for a,b in rules if a in update and b in update]
+            correct = True
+            for a,b in urules:
+
+                if update.index(a) > update.index(b):
+                    correct = False
+                    break
+            if not correct:
+
+                graph = defaultdict(list)
+                indegree = defaultdict(int)
+                indegree = defaultdict(int)
+
+                for a, b in urules:
+                    graph[a].append(b)
+                    indegree[b] += 1
+                    indegree[a] += 0
+                queue = deque([node for node in indegree if indegree[node] == 0])
+                result = []
+
+                while queue:
+                    current = queue.popleft()
+                    result.append(current)
+                    for neighbor in graph[current]:
+                        indegree[neighbor] -= 1
+                        if indegree[neighbor] == 0:
+                            queue.append(neighbor)
+
+
+                solution += result[len(result) // 2]
+
+
 
     return solution
 
