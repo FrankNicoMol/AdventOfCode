@@ -31,12 +31,15 @@ def get_string_per_day(df, years, day):
 
     day_string = f'| Day {day:02d} |'
     for year in years:
-        stars = get_stars(df, year, day)
-        github_page = get_github_page(year, day)
-        advent_of_code_url = f'https://adventofcode.com/{year}/day/{day}'
-        day_name = f':page_facing_up:'  # f'Day {day:02d}'
+        if year == 2025 and day > 12:
+            day_string += f':no_entry_sign: |'
+        else:
+            stars = get_stars(df, year, day)
+            github_page = get_github_page(year, day)
+            advent_of_code_url = f'https://adventofcode.com/{year}/day/{day}'
+            day_name = f':page_facing_up:'  # f'Day {day:02d}'
 
-        day_string += f' [{day_name}]({advent_of_code_url}) : [{stars}]({github_page}) |'
+            day_string += f' [{day_name}]({advent_of_code_url}) : [{stars}]({github_page}) |'
     day_string += '\n'
     return day_string
 
