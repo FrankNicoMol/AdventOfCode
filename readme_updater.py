@@ -1,6 +1,6 @@
-import pandas as pd
 import os
-from pathlib import Path
+
+import pandas as pd
 
 
 def get_github_page(year, day):
