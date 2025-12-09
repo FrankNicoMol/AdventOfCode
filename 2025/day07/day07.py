@@ -85,6 +85,55 @@ def solve_part1(text):
 def solve_part2(text):
     """Solve part 2."""
     value = 0
+    mat = np.array([[c for c in line] for line in text])
+    vals_mat = np.zeros(mat.shape).astype(int)
+    for i in range(len(mat) - 2):
+        block = mat[i:i + 3]
+        sindex = np.where(block[0] == "S")[0]
+        if len(sindex) > 0:
+            mat[i + 1, sindex[0]] = "|"
+
+        split_index = np.where(block[1] == "^")[0]
+        if len(split_index) > 0:
+
+            for ind in split_index:
+                if mat[i, ind] == "|":
+                    if ind - 1 > -1:
+                        mat[i + 1, ind - 1] = "|"
+                    if ind + 1 < len(mat):
+                        mat[i + 1, ind + 1] = "|"
+
+        split_index = np.where(block[1] == "|")[0]
+        if len(split_index) > 0:
+            for ind in split_index:
+
+                if mat[i + 2, ind] == ".":
+                    mat[i + 2, ind] = "|"
+    for i in range(len(mat)):
+        line = len(mat) - i - 1
+        if i == 0:
+            # arr = np.array().astype(int)
+
+            vals_mat[line] = [1 if c == '|' else 0 for c in mat[line]]
+
+            # mat[line] = np.array([1 if c == '|' else c for c in mat[line]])
+        elif i == len(mat) - 1:
+            sindex = np.where(mat[line] == "S")[0]
+            value = vals_mat[line + 1, sindex[0]]
+        else:
+            for j in range(len(mat[line])):
+                if mat[line, j] == "|" and vals_mat[line + 1, j] > 0:
+                    vals_mat[line, j] = vals_mat[line + 1, j]
+            for j in range(len(mat[line])):
+                if mat[line - 1, j] == "|" and mat[line, j] == "^":
+                    cval = 0
+                    if j - 1 > -1:
+                        cval += vals_mat[line, j - 1]
+                    if j + 1 < len(mat[line]):
+                        cval += vals_mat[line, j + 1]
+                    vals_mat[line - 1, j] = cval
+        # print(vals_mat)
+    print(vals_mat)
 
     return value
 
@@ -97,7 +146,7 @@ def solver(file_name, part=1):
     if part == 1:  # and 'example.txt' in file_name:
         value = solve_part1(text)
 
-    if part == 2 and 'example.txt' in file_name:
+    if part == 2:  # and 'example.txt' in file_name:
         value = solve_part2(text)
 
     print(f'Result for Part {part}')
